@@ -1,0 +1,370 @@
+.file-preview {
+  margin: 10px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 400px;
+}
+
+/* Image Preview */
+.image-preview {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.image-preview:hover {
+  transform: scale(1.02);
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.image-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.image-preview:hover .image-info {
+  opacity: 1;
+}
+
+/* Video Preview */
+.video-preview video {
+  width: 100%;
+  max-height: 400px;
+  border-radius: 12px;
+  background: #000;
+}
+
+.video-info {
+  padding: 10px;
+  background: var(--bg-secondary);
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Audio Preview */
+.audio-preview {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  align-items: center;
+}
+
+.audio-icon {
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.audio-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.audio-details audio {
+  width: 100%;
+  height: 32px;
+}
+
+/* PDF Preview */
+.pdf-preview {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.pdf-thumbnail {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pdf-thumbnail:hover {
+  background: var(--hover-bg);
+}
+
+.pdf-icon {
+  font-size: 48px;
+  flex-shrink: 0;
+}
+
+.pdf-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-view-pdf {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  width: fit-content;
+  transition: transform 0.2s;
+}
+
+.btn-view-pdf:hover {
+  transform: translateY(-2px);
+}
+
+/* Generic File */
+.generic-file {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  align-items: center;
+}
+
+.file-icon {
+  font-size: 48px;
+  flex-shrink: 0;
+}
+
+.file-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.file-size {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.btn-download-file {
+  padding: 8px 16px;
+  background: var(--bg-primary);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  width: fit-content;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.btn-download-file:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* File Modal */
+.file-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.file-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.file-modal-content img {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.file-modal-info {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+}
+
+.file-modal-info a {
+  padding: 8px 16px;
+  background: white;
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.file-modal-info a:hover {
+  transform: translateY(-2px);
+}
+
+.btn-close-modal {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-close-modal:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* PDF Viewer */
+.pdf-viewer {
+  width: 90vw;
+  height: 90vh;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pdf-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.pdf-viewer-header span {
+  font-weight: 600;
+  color: #333;
+}
+
+.pdf-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pdf-actions .btn-download {
+  padding: 8px 16px;
+  background: #667eea;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.pdf-actions .btn-download:hover {
+  background: #5568d3;
+}
+
+.pdf-viewer .btn-close-modal {
+  position: static;
+  background: #e74c3c;
+  color: white;
+}
+
+.pdf-viewer .btn-close-modal:hover {
+  background: #c0392b;
+}
+
+.pdf-viewer iframe {
+  border: none;
+  height: calc(100% - 60px);
+}
+
+/* Image Gallery (for multiple images) */
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.image-gallery-item {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.image-gallery-item:hover {
+  transform: scale(1.05);
+}
+
+.image-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .file-preview {
+    max-width: 100%;
+  }
+
+  .file-modal-content {
+    max-width: 95vw;
+  }
+
+  .pdf-viewer {
+    width: 95vw;
+    height: 95vh;
+  }
+}

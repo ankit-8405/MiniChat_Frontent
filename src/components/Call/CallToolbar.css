@@ -1,0 +1,104 @@
+.call-toolbar {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 15px 25px;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.toolbar-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.toolbar-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.toolbar-btn:active {
+  transform: scale(0.95);
+}
+
+.toolbar-btn.disabled {
+  background: rgba(255, 0, 0, 0.3);
+}
+
+.toolbar-btn.disabled:hover {
+  background: rgba(255, 0, 0, 0.4);
+}
+
+.toolbar-btn.active {
+  background: rgba(76, 175, 80, 0.5);
+}
+
+.toolbar-btn.active:hover {
+  background: rgba(76, 175, 80, 0.6);
+}
+
+.btn-end-call {
+  background: #f44336;
+}
+
+.btn-end-call:hover {
+  background: #da190b;
+  transform: scale(1.1);
+}
+
+/* Tooltip effect */
+.toolbar-btn::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.toolbar-btn:hover::after {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .call-toolbar {
+    bottom: 20px;
+    padding: 12px 20px;
+    gap: 12px;
+  }
+
+  .toolbar-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .toolbar-btn::after {
+    display: none; /* Hide tooltips on mobile */
+  }
+}

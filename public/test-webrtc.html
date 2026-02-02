@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Test - MiniChat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .test-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        video {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            background: #000;
+            margin: 10px 0;
+        }
+        
+        .video-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .device-list {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .device-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        
+        .info {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .error-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            color: #c62828;
+        }
+        
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 WebRTC Test Page</h1>
+        <p class="subtitle">Test your browser's video/audio call capabilities</p>
+        
+        <!-- Browser Support -->
+        <div class="test-section">
+            <h2>1. Browser Support <span id="browserStatus" class="status pending">Testing...</span></h2>
+            <div id="browserInfo"></div>
+        </div>
+        
+        <!-- Media Devices -->
+        <div class="test-section">
+            <h2>2. Media Devices <span id="devicesStatus" class="status pending">Not tested</span></h2>
+            <button onclick="testDevices()">🔍 Check Devices</button>
+            <div id="devicesList"></div>
+        </div>
+        
+        <!-- Camera Test -->
+        <div class="test-section">
+            <h2>3. Camera Test <span id="cameraStatus" class="status pending">Not tested</span></h2>
+            <button onclick="testCamera()">📹 Test Camera</button>
+            <button onclick="stopCamera()" disabled id="stopCameraBtn">⏹️ Stop</button>
+            <div class="video-container">
+                <video id="cameraVideo" autoplay playsinline muted></video>
+            </div>
+        </div>
+        
+        <!-- Microphone Test -->
+        <div class="test-section">
+            <h2>4. Microphone Test <span id="micStatus" class="status pending">Not tested</span></h2>
+            <button onclick="testMicrophone()">🎤 Test Microphone</button>
+            <button onclick="stopMicrophone()" disabled id="stopMicBtn">⏹️ Stop</button>
+            <div id="micInfo"></div>
+        </div>
+        
+        <!-- Screen Share Test -->
+        <div class="test-section">
+            <h2>5. Screen Share Test <span id="screenStatus" class="status pending">Not tested</span></h2>
+            <button onclick="testScreenShare()">🖥️ Test Screen Share</button>
+            <button onclick="stopScreenShare()" disabled id="stopScreenBtn">⏹️ Stop</button>
+            <div class="video-container">
+                <video id="screenVideo" autoplay playsinline muted></video>
+            </div>
+        </div>
+        
+        <!-- WebRTC Connection Test -->
+        <div class="test-section">
+            <h2>6. WebRTC Connection <span id="webrtcStatus" class="status pending">Not tested</span></h2>
+            <button onclick="testWebRTC()">🔗 Test Connection</button>
+            <div id="webrtcInfo"></div>
+        </div>
+        
+        <!-- Results -->
+        <div class="info">
+            <strong>ℹ️ Instructions:</strong>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Click each test button in order</li>
+                <li>Allow permissions when browser asks</li>
+                <li>All tests should show <span class="status success">✅ Success</span></li>
+                <li>If any test fails, check the error message</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let cameraStream = null;
+        let micStream = null;
+        let screenStream = null;
+
+        // Test 1: Browser Support
+        function testBrowserSupport() {
+            const status = document.getElementById('browserStatus');
+            const info = document.getElementById('browserInfo');
+            
+            const hasGetUserMedia = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+            const hasRTCPeerConnection = !!(window.RTCPeerConnection);
+            const hasGetDisplayMedia = !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+            
+            let html = '<div class="device-list">';
+            html += `<div class="device-item">✅ getUserMedia: ${hasGetUserMedia ? 'Supported' : '❌ Not supported'}</div>`;
+            html += `<div class="device-item">✅ RTCPeerConnection: ${hasRTCPeerConnection ? 'Supported' : '❌ Not supported'}</div>`;
+            html += `<div class="device-item">✅ getDisplayMedia: ${hasGetDisplayMedia ? 'Supported' : '❌ Not supported'}</div>`;
+            html += `<div class="device-item">🌐 Browser: ${navigator.userAgent}</div>`;
+            html += '</div>';
+            
+            info.innerHTML = html;
+            
+            if (hasGetUserMedia && hasRTCPeerConnection) {
+                status.className = 'status success';
+                status.textContent = '✅ Supported';
+            } else {
+                status.className = 'status error';
+                status.textContent = '❌ Not supported';
+                info.innerHTML += '<div class="error-box">Your browser does not support WebRTC. Please use Chrome, Firefox, Edge, or Safari.</div>';
+            }
+        }
+
+        // Test 2: Media Devices
+        async function testDevices() {
+            const status = document.getElementById('devicesStatus');
+            const list = document.getElementById('devicesList');
+            
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                
+                const videoDevices = devices.filter(d => d.kind === 'videoinput');
+                const audioInputs = devices.filter(d => d.kind === 'audioinput');
+                const audioOutputs = devices.filter(d => d.kind === 'audiooutput');
+                
+                let html = '<div class="device-list">';
+                html += `<h3>📹 Cameras (${videoDevices.length})</h3>`;
+                videoDevices.forEach(d => {
+                    html += `<div class="device-item">${d.label || 'Camera ' + d.deviceId.substr(0, 8)}</div>`;
+                });
+                
+                html += `<h3>🎤 Microphones (${audioInputs.length})</h3>`;
+                audioInputs.forEach(d => {
+                    html += `<div class="device-item">${d.label || 'Microphone ' + d.deviceId.substr(0, 8)}</div>`;
+                });
+                
+                html += `<h3>🔊 Speakers (${audioOutputs.length})</h3>`;
+                audioOutputs.forEach(d => {
+                    html += `<div class="device-item">${d.label || 'Speaker ' + d.deviceId.substr(0, 8)}</div>`;
+                });
+                html += '</div>';
+                
+                list.innerHTML = html;
+                
+                if (videoDevices.length > 0 && audioInputs.length > 0) {
+                    status.className = 'status success';
+                    status.textContent = '✅ Found';
+                } else {
+                    status.className = 'status error';
+                    status.textContent = '❌ Missing devices';
+                }
+            } catch (err) {
+                status.className = 'status error';
+                status.textContent = '❌ Error';
+                list.innerHTML = `<div class="error-box">Error: ${err.message}</div>`;
+            }
+        }
+
+        // Test 3: Camera
+        async function testCamera() {
+            const status = document.getElementById('cameraStatus');
+            const video = document.getElementById('cameraVideo');
+            const stopBtn = document.getElementById('stopCameraBtn');
+            
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: 1280, height: 720 }, 
+                    audio: false 
+                });
+                
+                video.srcObject = cameraStream;
+                status.className = 'status success';
+                status.textContent = '✅ Working';
+                stopBtn.disabled = false;
+            } catch (err) {
+                status.className = 'status error';
+                status.textContent = '❌ Failed';
+                video.parentElement.innerHTML += `<div class="error-box">Error: ${err.message}<br><br>Please allow camera access in browser settings.</div>`;
+            }
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                document.getElementById('cameraVideo').srcObject = null;
+                document.getElementById('stopCameraBtn').disabled = true;
+            }
+        }
+
+        // Test 4: Microphone
+        async function testMicrophone() {
+            const status = document.getElementById('micStatus');
+            const info = document.getElementById('micInfo');
+            const stopBtn = document.getElementById('stopMicBtn');
+            
+            try {
+                micStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: false, 
+                    audio: true 
+                });
+                
+                // Create audio context to visualize
+                const audioContext = new AudioContext();
+                const analyser = audioContext.createAnalyser();
+                const microphone = audioContext.createMediaStreamSource(micStream);
+                microphone.connect(analyser);
+                
+                analyser.fftSize = 256;
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                
+                function checkAudio() {
+                    analyser.getByteFrequencyData(dataArray);
+                    const average = dataArray.reduce((a, b) => a + b) / bufferLength;
+                    info.innerHTML = `<div class="device-list"><div class="device-item">🎤 Audio Level: ${Math.round(average)}/255 ${average > 10 ? '🔊' : '🔇'}</div></div>`;
+                    
+                    if (micStream && micStream.active) {
+                        requestAnimationFrame(checkAudio);
+                    }
+                }
+                
+                checkAudio();
+                
+                status.className = 'status success';
+                status.textContent = '✅ Working';
+                stopBtn.disabled = false;
+                
+                info.innerHTML += '<div class="info">Speak into your microphone. The audio level should change.</div>';
+            } catch (err) {
+                status.className = 'status error';
+                status.textContent = '❌ Failed';
+                info.innerHTML = `<div class="error-box">Error: ${err.message}<br><br>Please allow microphone access in browser settings.</div>`;
+            }
+        }
+
+        function stopMicrophone() {
+            if (micStream) {
+                micStream.getTracks().forEach(track => track.stop());
+                document.getElementById('micInfo').innerHTML = '';
+                document.getElementById('stopMicBtn').disabled = true;
+            }
+        }
+
+        // Test 5: Screen Share
+        async function testScreenShare() {
+            const status = document.getElementById('screenStatus');
+            const video = document.getElementById('screenVideo');
+            const stopBtn = document.getElementById('stopScreenBtn');
+            
+            try {
+                screenStream = await navigator.mediaDevices.getDisplayMedia({ 
+                    video: true, 
+                    audio: false 
+                });
+                
+                video.srcObject = screenStream;
+                status.className = 'status success';
+                status.textContent = '✅ Working';
+                stopBtn.disabled = false;
+                
+                screenStream.getVideoTracks()[0].onended = () => {
+                    stopScreenShare();
+                };
+            } catch (err) {
+                status.className = 'status error';
+                status.textContent = '❌ Failed';
+                video.parentElement.innerHTML += `<div class="error-box">Error: ${err.message}</div>`;
+            }
+        }
+
+        function stopScreenShare() {
+            if (screenStream) {
+                screenStream.getTracks().forEach(track => track.stop());
+                document.getElementById('screenVideo').srcObject = null;
+                document.getElementById('stopScreenBtn').disabled = true;
+            }
+        }
+
+        // Test 6: WebRTC Connection
+        async function testWebRTC() {
+            const status = document.getElementById('webrtcStatus');
+            const info = document.getElementById('webrtcInfo');
+            
+            try {
+                const pc = new RTCPeerConnection({
+                    iceServers: [
+                        { urls: 'stun:stun.l.google.com:19302' }
+                    ]
+                });
+                
+                let html = '<div class="device-list">';
+                html += '<div class="device-item">✅ RTCPeerConnection created</div>';
+                
+                // Test ICE gathering
+                pc.onicecandidate = (event) => {
+                    if (event.candidate) {
+                        html += `<div class="device-item">✅ ICE Candidate: ${event.candidate.type}</div>`;
+                        info.innerHTML = html + '</div>';
+                    }
+                };
+                
+                // Create offer
+                const offer = await pc.createOffer();
+                await pc.setLocalDescription(offer);
+                html += '<div class="device-item">✅ SDP Offer created</div>';
+                
+                info.innerHTML = html + '</div>';
+                
+                status.className = 'status success';
+                status.textContent = '✅ Working';
+                
+                setTimeout(() => pc.close(), 5000);
+            } catch (err) {
+                status.className = 'status error';
+                status.textContent = '❌ Failed';
+                info.innerHTML = `<div class="error-box">Error: ${err.message}</div>`;
+            }
+        }
+
+        // Run browser support test on load
+        window.onload = () => {
+            testBrowserSupport();
+        };
+    </script>
+</body>
+</html>

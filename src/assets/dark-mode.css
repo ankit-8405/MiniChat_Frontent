@@ -1,0 +1,260 @@
+/* Light Mode (Default) */
+:root[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f7fa;
+  --bg-tertiary: #ecf0f1;
+  --bg-sidebar: #34495e;
+  --bg-navbar: #2c3e50;
+  
+  --text-primary: #2c3e50;
+  --text-secondary: #7f8c8d;
+  --text-muted: #95a5a6;
+  --text-inverse: #ffffff;
+  
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  
+  --message-bg: #ffffff;
+  --message-own-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --message-other-bg: #ffffff;
+  
+  --input-bg: #ffffff;
+  --input-border: #e0e0e0;
+  --input-focus: #667eea;
+  
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-empty: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* Dark Mode */
+:root[data-theme="dark"] {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #2d2d30;
+  --bg-tertiary: #3e3e42;
+  --bg-sidebar: #252526;
+  --bg-navbar: #1e1e1e;
+  
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-muted: #808080;
+  --text-inverse: #ffffff;
+  
+  --border-color: #3e3e42;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  
+  --message-bg: #2d2d30;
+  --message-own-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --message-other-bg: #2d2d30;
+  
+  --input-bg: #2d2d30;
+  --input-border: #3e3e42;
+  --input-focus: #667eea;
+  
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-empty: linear-gradient(135deg, #2d2d30 0%, #3e3e42 100%);
+}
+
+/* Apply theme colors */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.dashboard {
+  background: var(--bg-primary);
+}
+
+.chat-area {
+  background: var(--bg-primary);
+}
+
+.message-list {
+  background: var(--bg-secondary);
+}
+
+.message-bubble {
+  background: var(--message-other-bg);
+  color: var(--text-primary);
+}
+
+.own-message .message-bubble {
+  background: var(--message-own-bg);
+  color: var(--text-inverse);
+}
+
+.message-text {
+  color: var(--text-primary);
+}
+
+.own-message .message-text {
+  color: var(--text-inverse);
+}
+
+.message-sender {
+  color: var(--text-primary);
+}
+
+.message-time {
+  color: var(--text-muted);
+}
+
+.message-input {
+  background: var(--bg-primary);
+  border-top-color: var(--border-color);
+}
+
+.message-text-input {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-primary);
+}
+
+.message-text-input:focus {
+  border-color: var(--input-focus);
+}
+
+.message-text-input::placeholder {
+  color: var(--text-muted);
+}
+
+.sidebar {
+  background: var(--bg-sidebar);
+}
+
+.navbar {
+  background: var(--bg-navbar);
+}
+
+.channel-item {
+  color: var(--text-inverse);
+}
+
+.channel-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.no-channel {
+  background: var(--gradient-empty);
+  color: var(--text-muted);
+}
+
+.modal-content {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.modal-content input,
+.modal-content textarea {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-primary);
+}
+
+.btn-emoji,
+.btn-voice,
+.btn-attach {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.btn-emoji:hover:not(:disabled),
+.btn-voice:hover:not(:disabled),
+.btn-attach:hover:not(:disabled) {
+  background: var(--bg-secondary);
+}
+
+.typing-indicator {
+  color: var(--text-secondary);
+}
+
+.typing-dots {
+  background: var(--message-other-bg);
+}
+
+.channel-info-panel {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+.info-label {
+  color: var(--text-secondary);
+}
+
+.info-value {
+  color: var(--text-primary);
+}
+
+.channel-id,
+.share-link {
+  background: var(--input-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.file-preview {
+  background: var(--bg-tertiary);
+}
+
+.message-file a {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.message-file a:hover {
+  background: var(--bg-secondary);
+}
+
+/* Dark mode specific adjustments */
+[data-theme="dark"] .message-avatar {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+[data-theme="dark"] .message-bubble {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .own-message .message-bubble {
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.5);
+}
+
+[data-theme="dark"] .message-input {
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .chat-header {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* Theme toggle button */
+.btn-theme-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(180deg);
+}
+
+/* Smooth transitions for theme change */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Preserve animations */
+@keyframes messageSlideIn,
+@keyframes typingBounce,
+@keyframes float,
+@keyframes fadeIn,
+@keyframes readPulse {
+  /* Keep original animations */
+}

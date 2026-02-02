@@ -1,0 +1,20 @@
+{
+  "name": "MiniChat - Video Call & Messaging",
+  "short_name": "MiniChat",
+  "description": "Real-time chat application with video/audio calls, screen sharing, and messaging",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "communication"]
+}
