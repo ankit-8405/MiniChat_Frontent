@@ -23,6 +23,10 @@ export default defineConfig({
     port: 3000,
     host: '0.0.0.0',
     strictPort: true,
-    https: false // Disable HTTPS for client to avoid certificate issues
+    https: false,
+    hmr: {
+      host: 'localhost',
+      port: 3000
+    }
   }
 });

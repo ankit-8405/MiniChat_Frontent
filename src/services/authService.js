@@ -2,12 +2,8 @@ import api from './api';
 
 export const authService = {
   // OTP-based signup
-  signup: async (username, mobile, email) => {
-    const payload = { username };
-    if (mobile) payload.mobile = mobile;
-    if (email) payload.email = email;
-    
-    const response = await api.post('/auth/signup', payload);
+  signup: async (username, mobile) => {
+    const response = await api.post('/auth/signup', { username, mobile });
     return response.data;
   },
 
@@ -18,12 +14,8 @@ export const authService = {
   },
 
   // Request login OTP
-  requestLoginOTP: async (mobile, email) => {
-    const payload = {};
-    if (mobile) payload.mobile = mobile;
-    if (email) payload.email = email;
-    
-    const response = await api.post('/auth/request-login-otp', payload);
+  requestLoginOTP: async (mobile) => {
+    const response = await api.post('/auth/request-login-otp', { mobile });
     return response.data;
   },
 

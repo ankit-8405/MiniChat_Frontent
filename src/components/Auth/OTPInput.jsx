@@ -1,20 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
 import './OTPInput.css';
 
-const OTPInput = ({ length = 6, onComplete, loading = false }) => {
+const OTPInput = ({ length = 6, onComplete, loading = false, initialValue = '' }) => { // eslint-disable-line react/prop-types
   const [otp, setOtp] = useState(new Array(length).fill(''));
   const inputRefs = useRef([]);
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => { onCompleteRef.current = onComplete; });
 
   useEffect(() => {
-    // Focus first input on mount
-    if (inputRefs.current[0]) {
-      inputRefs.current[0].focus();
+    // Auto-fill if initialValue provided (dev mode)
+    if (initialValue && initialValue.length === length) {
+      const digits = initialValue.split('');
+      setOtp(digits);
+      // Delay auto-submit slightly so UI renders the filled boxes first
+      const t = setTimeout(() => onCompleteRef.current(initialValue), 300);
+      return () => clearTimeout(t);
     }
-  }, []);
+    // Focus first input on mount
+    inputRefs.current[0]?.focus();
+  }, [initialValue, length]);
 
   const handleChange = (index, value) => {
-    // Only allow numbers
-    if (isNaN(value)) return;
+    // Only allow digits 0-9
+    if (value && !/^\d+$/.test(value)) return;
 
     const newOtp = [...otp];
     // Take only the last character if multiple are pasted
@@ -44,7 +52,7 @@ const OTPInput = ({ length = 6, onComplete, loading = false }) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text').slice(0, length);
     
-    if (isNaN(pastedData)) return;
+    if (!/^\d+$/.test(pastedData)) return;
 
     const newOtp = pastedData.split('');
     setOtp([...newOtp, ...new Array(length - newOtp.length).fill('')]);
